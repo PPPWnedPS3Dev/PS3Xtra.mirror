@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS3 Firmware List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://archive.org/download/ps3-xmb-waves/xmb_waves.gif') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: rgba(51, 51, 51, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            font-size: 24px;
+            color: #ffcc00;
+        }
+        .dropdown {
+            margin: 10px 0;
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            background-color: #444;
+            color: white;
+            padding: 10px 15px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(51, 51, 51, 0.9);
+            min-width: 160px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #575757;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PS3 Firmware Versions</h1>
+        <div class="dropdown">
+            <button class="dropbtn">Custom Firmware (CFW)</button>
+            <div class="dropdown-content">
+                <a href="#">4.90.1 Evilnat</a>
+                <a href="#">4.89.2 Evilnat</a>
+                <a href="#">4.88.3 Evilnat</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">Hybrid Firmware (HFW)</button>
+            <div class="dropdown-content">
+                <a href="#">4.90 HFW</a>
+                <a href="#">4.89 HFW</a>
+                <a href="#">4.88 HFW</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">Official Firmware (OFW)</button>
+            <div class="dropdown-content">
+                <a href="#">4.90</a>
+                <a href="#">4.89</a>
+                <a href="#">4.88</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
