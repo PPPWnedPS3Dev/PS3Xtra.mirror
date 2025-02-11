@@ -54,11 +54,19 @@
             border: 1px solid #555;
             border-radius: 5px;
         }
+        a {
+            color: #00ccff;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body onload="loadLicenses()">
     <div class="container">
         <h1>PS3Patch Master</h1>
+        <p>Enter the Game ID to download the license:</p>
+        <input type="text" id="game_id" placeholder="Enter Game ID (e.g., BLES01807)">
+        <br>
+        <button onclick="downloadLicense()">Download License</button>
         <p>Available Licenses:</p>
         <div class="grid" id="licenseGrid"></div>
         <p>If you want to use an alternative, click below:</p>
@@ -71,18 +79,20 @@
             if (/^(BLES|BLUS)\d{5}$/.test(game_id)) {
                 window.location.href = `https://raw.githubusercontent.com/CellBreakers/PS3PatchMasterLicenses/main/${game_id}.rap`;
             } else {
-                alert("Please enter a valid Game ID (e.g., BLES01807).");
+                alert("Please enter a valid Game ID (e.g., BLES01807).\nMake sure JavaScript is enabled on your PS3 browser.");
             }
         }
 
         function loadLicenses() {
             var repoURL = "https://api.github.com/repos/CellBreakers/PS3PatchMasterLicenses/contents/";
-            fetch(repoURL)
-                .then(response => response.json())
-                .then(data => {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", repoURL, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
                     var grid = document.getElementById("licenseGrid");
                     grid.innerHTML = "";
-                    data.forEach(file => {
+                    data.forEach(function(file) {
                         if (file.name.endsWith(".rap")) {
                             var gameID = file.name.replace(".rap", "");
                             var div = document.createElement("div");
@@ -92,8 +102,9 @@
                             grid.appendChild(div);
                         }
                     });
-                })
-                .catch(error => console.error("Error loading licenses:", error));
+                }
+            };
+            xhr.send();
         }
     </script>
 </body>
