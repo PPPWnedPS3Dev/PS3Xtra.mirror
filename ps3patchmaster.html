@@ -56,9 +56,10 @@
         }
     </style>
 </head>
-<body>
+<body onload="loadLicenses()">
     <div class="container">
         <h1>PS3Patch Master</h1>
+        <p>Available Licenses:</p>
         <div class="grid" id="licenseGrid"></div>
         <p>If you want to use an alternative, click below:</p>
         <a href="https://store.brewology.com/get/homebrew.php?id=126&fid=1688">Download ReActPSN For PS3</a>
@@ -66,11 +67,11 @@
 
     <script>
         function downloadLicense() {
-            var game_id = document.getElementById("game_id").value.trim();
-            if (game_id) {
+            var game_id = document.getElementById("game_id").value.trim().toUpperCase();
+            if (/^(BLES|BLUS)\d{5}$/.test(game_id)) {
                 window.location.href = `https://raw.githubusercontent.com/CellBreakers/PS3PatchMasterLicenses/main/${game_id}.rap`;
             } else {
-                alert("Please enter a valid Game ID.");
+                alert("Please enter a valid Game ID (e.g., BLES01807).");
             }
         }
 
@@ -94,9 +95,6 @@
                 })
                 .catch(error => console.error("Error loading licenses:", error));
         }
-
-        window.onload = loadLicenses;
     </script>
 </body>
 </html>
-
