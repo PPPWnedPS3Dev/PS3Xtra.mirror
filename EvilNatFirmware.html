@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Evilnat CFW Downloads</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+        }
+        .btn {
+            display: block;
+            width: 80%;
+            max-width: 300px;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #ff6600;
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .variants {
+            display: none;
+            margin-top: 10px;
+        }
+        .variants a {
+            display: block;
+            background-color: #444;
+            margin: 5px auto;
+            padding: 8px;
+            width: 70%;
+            max-width: 280px;
+            color: white;
+            text-decoration: none;
+            border: 1px solid #ff6600;
+        }
+    </style>
+    <script>
+        function toggleVariants(version) {
+            var variants = document.getElementById("variants-" + version);
+            if (variants.style.display === "block") {
+                variants.style.display = "none";
+            } else {
+                variants.style.display = "block";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Evilnat CFW Downloads</h1>
+    <p>Select a version to download:</p>
+    
+    <button class="btn" onclick="toggleVariants('487')">Download Evilnat 4.87</button>
+    <div id="variants-487" class="variants">
+        <a href="#">CEX</a>
+        <a href="#">DEX</a>
+        <a href="#">DPEX</a>
+        <a href="#">No BD</a>
+        <a href="#">No BT</a>
+    </div>
+    
+    <button class="btn" onclick="toggleVariants('488')">Download Evilnat 4.88</button>
+    <div id="variants-488" class="variants">
+        <a href="#">CEX</a>
+        <a href="#">DEX</a>
+        <a href="#">DPEX</a>
+        <a href="#">No BD</a>
+        <a href="#">No BT</a>
+    </div>
+    
+    <button class="btn" onclick="toggleVariants('489')">Download Evilnat 4.89</button>
+    <div id="variants-489" class="variants">
+        <a href="#">CEX</a>
+        <a href="#">DEX</a>
+        <a href="#">DPEX</a>
+        <a href="#">No BD</a>
+        <a href="#">No BT</a>
+    </div>
+    
+    <button class="btn" onclick="toggleVariants('490')">Download Evilnat 4.90</button>
+    <div id="variants-490" class="variants">
+        <a href="#">CEX</a>
+        <a href="#">DEX</a>
+        <a href="#">DPEX</a>
+        <a href="#">No BD</a>
+        <a href="#">No BT</a>
+    </div>
+    
+    <button class="btn" onclick="toggleVariants('491')">Download Evilnat 4.91</button>
+    <div id="variants-491" class="variants">
+        <a href="#">CEX</a>
+        <a href="#">DEX</a>
+        <a href="#">DPEX</a>
+        <a href="#">No BD</a>
+        <a href="#">No BT</a>
+    </div>
+</body>
+</html>
