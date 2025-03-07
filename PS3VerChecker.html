@@ -46,10 +46,10 @@
                 'CECH-42xxA', 'CECH-42xxB', 'CECH-42xxC', 'CECH-43xxA', 'CECH-43xxB', 'CECH-43xxC'
             ];
 
-            if (cfwModels.includes(serial)) {
+            if (cfwModels.indexOf(serial) !== -1) {
                 result.innerHTML = '✔️ Your console is compatible with CFW!';
                 result.className = 'result compatible';
-            } else if (henModels.includes(serial)) {
+            } else if (henModels.indexOf(serial) !== -1) {
                 result.innerHTML = '❌ Your console is not compatible with the PS3 CFW. But don\'t worry, you can use PS3HEN!';
                 result.className = 'result not-compatible';
             } else {
