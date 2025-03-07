@@ -8,35 +8,30 @@
         body { font-family: Arial, sans-serif; text-align: center; background-color: #111; color: white; }
         .coldboot-container { display: flex; flex-wrap: wrap; justify-content: center; }
         .coldboot-item { margin: 10px; padding: 10px; border: 1px solid #fff; width: 200px; }
-        img { width: 180px; height: 100px; }
-        a { text-decoration: none; color: cyan; }
+        img { width: 180px; height: 100px; display: block; margin: auto; }
+        a { text-decoration: none; color: cyan; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
     <h1>PS3 Coldboots Collection</h1>
-    <div class="coldboot-container">
-        <!-- Coldboot entries -->
-        <script>
-            const githubPkgBaseUrl = "https://raw.githubusercontent.com/PPPWnedPS3Dev/PS3Coldboots.mirror/main/";
-            const githubImgBaseUrl = "https://raw.githubusercontent.com/PPPWnedPS3Dev/PS3ColdbootsIcons.mirror/main/";
-
-            const coldboots = [];
-            for (let i = 1; i <= 300; i++) {
-                coldboots.push({
-                    name: `Coldboot ${i}`,
-                    image: `${githubImgBaseUrl}${i}.jpg`,
-                    link: `${githubPkgBaseUrl}${i}.pkg`
-                });
-            }
-            coldboots.forEach(cb => {
-                document.write(`
-                    <div class="coldboot-item">
-                        <img src="${cb.image}" alt="${cb.name}"><br>
-                        <a href="${cb.link}">${cb.name}</a>
-                    </div>
-                `);
-            });
-        </script>
+    <div class="coldboot-container" id="coldboot-list">
+        <!-- Coldboot entries will be inserted here -->
     </div>
+
+    <script>
+        const githubPkgBaseUrl = "http://raw.githubusercontent.com/PPPWnedPS3Dev/PS3Coldboots.mirror/main/";
+        const githubImgBaseUrl = "http://raw.githubusercontent.com/PPPWnedPS3Dev/PS3ColdbootsIcons.mirror/main/";
+
+        let coldbootHTML = "";
+        for (let i = 1; i <= 300; i++) {
+            coldbootHTML += `
+                <div class="coldboot-item">
+                    <img src="${githubImgBaseUrl}${i}.jpg" alt="Coldboot ${i}">
+                    <a href="${githubPkgBaseUrl}${i}.pkg">Download Coldboot ${i}</a>
+                </div>
+            `;
+        }
+        document.getElementById("coldboot-list").innerHTML = coldbootHTML;
+    </script>
 </body>
 </html>
