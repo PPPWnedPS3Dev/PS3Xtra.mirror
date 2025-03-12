@@ -24,9 +24,14 @@
 
         var coldbootHTML = "";
         for (var i = 1; i <= 300; i++) {
+            var num = String(i).padStart(3, '0'); // Ensure O001 format
+            var pkgUrl = githubPkgBaseUrl + "Logo_HEN_O" + num + ".pkg";
+            var imgUrlJpg = githubImgBaseUrl + "Logo_HEN_O" + num + ".jpg";
+            var imgUrlPng = githubImgBaseUrl + "Logo_HEN_O" + num + ".png";
+            
             coldbootHTML += '<div class="coldboot-item">' +
-                '<img src="' + githubImgBaseUrl + i + '.jpg" alt="Coldboot ' + i + '">' +
-                '<a href="' + githubPkgBaseUrl + i + '.pkg">Download Coldboot ' + i + '</a>' +
+                '<img src="' + imgUrlJpg + '" onerror="this.onerror=null;this.src=\'' + imgUrlPng + '\';" alt="Coldboot ' + num + '">' +
+                '<a href="' + pkgUrl + '">Download Coldboot ' + num + '</a>' +
                 '</div>';
         }
         document.getElementById("coldboot-list").innerHTML = coldbootHTML;
