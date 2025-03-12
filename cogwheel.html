@@ -1,146 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <title>PS3HEN Logos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CogWheel - PS3</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: #ffffff;
-            line-height: 1.6;
-            display: flex;
-        }
-        .store-header {
-            width: 100%;
-            padding: 10px 20px;
-            background-color: #222;
-            color: #fff;
-            text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo img {
-            width: 32px;
-            height: 32px;
-            margin-right: 10px;
-        }
-        .nav-links {
-            text-align: center;
-            margin-top: 5px;
-        }
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 0 10px;
-            display: inline-block;
-        }
-        .nav-links a:hover {
-            color: #f39c12;
-        }
-        .sidebar {
-            position: fixed;
-            top: 50px;
-            left: 0;
-            width: 250px;
-            height: 100%;
-            background-color: #333;
-            padding-top: 80px;
-            z-index: 999;
-            overflow-y: auto;
-        }
-        .menu-links a {
-            display: block;
-            padding: 10px 20px;
-            color: #bbb;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .menu-links a:hover {
-            background-color: #444;
-            color: #fff;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 80px 20px;
-            text-align: center;
-            flex: 1;
-        }
-        .content-box {
-            background-color: #2a2a2a;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .footer {
-            width: 100%;
-            text-align: center;
-            padding: 10px;
-            background-color: #222;
-            color: #888;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #111; color: white; }
+        .coldboot-container { display: block; width: 100%; }
+        .coldboot-item { display: inline-block; margin: 10px; padding: 10px; border: 1px solid #fff; width: 200px; text-align: center; }
+        img { width: 180px; height: 100px; }
+        a { text-decoration: none; color: cyan; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <header class="store-header">
-            CogWheel
-        </div>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-        </div>
-    </header>
-    <div class="sidebar">
-        <div class="menu-links">
-            <a href="PS3HENLogos.html">PS3HEN Logos
-            <a href="PSNLogos.html">PSN Logos</a>
-            <a href="Coldboots.html">Coldboots</a>
-            <a href="Themes.html">Themes</a>
-            <a href="Firmwares.html">Firmwares</a>
-            <a href="Homebrew.html">Homebrew</a>
-            <a href="FreeStores.html">Free Stores</a>
-            <a href="emulators.html">Emulators</a>
-            <a href="PS3JailbreakSites.html">PS3 Jailbreaking Sites</a>
-            <a href="License.html">License</a>
-            <a href="PrivacyPolicy.html">Privacy Policy</a>
-            <a href="TermsOfUse.html">Terms of Use</a>
-        </div>
+    <h1>PS3HEN Logos Collection</h1>
+    <div class="coldboot-container" id="coldboot-list">
+        <!-- Coldboot entries will be inserted here -->
     </div>
-    <div class="content">
-        <div class="content-box">
-            <h2>Update Log</h2>
-            <p>- Version 2.6.0 Released!</p>
-            <p>- Fixed some major bugs</p>
-            <p>- Added FreeStores</p>
-            <p>- Added JailbreakSites</p>
-            <p>- Updated some of the links which redirected to older versions of the apps</p>
-        </div>
-        <div class="content-box">
-            <h2>News</h2>
-            <p>- New Homebrew Apps are coming soon!</p>
-            <p>- Stay tuned for upcoming PS3 themes, more free stores...</p>
-        </div>
-    </div>
-    <footer class="footer">
-        <p>&copy; 2025 CellBreakers. All Rights Reserved.</p>
-    </footer>
+
+    <script>
+        var githubPkgBaseUrl = "https://raw.githubusercontent.com/PPPWnedPS3Dev/PS3HENIcons.mirror/main/";
+        var githubImgBaseUrl = "https://raw.githubusercontent.com/PPPWnedPS3Dev/PS3HENLogos.mirror/main/";
+
+        var coldbootHTML = "";
+        for (var i = 1; i <= 300; i++) {
+            var num = "O" + String(i).padStart(3, '0'); // Ensure O001 format
+            var pkgUrl = githubPkgBaseUrl + "Logo_HEN_" + num + ".pkg";
+            var imgUrlJpg = githubImgBaseUrl + "Logo_HEN_" + num + ".jpg";
+            var imgUrlPng = githubImgBaseUrl + "Logo_HEN_" + num + ".png";
+            
+            coldbootHTML += '<div class="coldboot-item">' +
+                '<img src="' + imgUrlJpg + '" onerror="this.onerror=null;this.src=\'' + imgUrlPng + '\';" alt="Coldboot ' + num + '">' +
+                '<a href="' + pkgUrl + '">Download Coldboot ' + num + '</a>' +
+                '</div>';
+        }
+        document.getElementById("coldboot-list").innerHTML = coldbootHTML;
+    </script>
 </body>
 </html>
