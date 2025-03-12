@@ -24,14 +24,13 @@
 
         var coldbootHTML = "";
         for (var i = 1; i <= 13; i++) { // Limit to 13 existing files
-            var num = "O" + (i < 10 ? "0" + i : i); // Ensure O0X for 1-9, OXX for 10-13
-            var pkgUrl = githubPkgBaseUrl + "Logo_HEN_" + num + ".pkg";
-            var imgUrlJpg = githubImgBaseUrl + "Logo_HEN_" + num + ".jpg";
-            var imgUrlPng = githubImgBaseUrl + "Logo_HEN_" + num + ".png";
+            var num = "o0" + i; // Ensure lowercase 'o0X' format
+            var pkgUrl = githubPkgBaseUrl + "Logo_HEN_O" + (i < 10 ? "0" + i : i) + ".pkg";
+            var imgUrlPng = githubImgBaseUrl + "logo_hen_" + num + ".png";
             
             coldbootHTML += '<div class="coldboot-item">' +
-                '<img src="' + imgUrlJpg + '" onerror="this.onerror=null;this.src=\'' + imgUrlPng + '\';" alt="Coldboot ' + num + '">' +
-                '<a href="' + pkgUrl + '">Download Coldboot ' + num + '</a>' +
+                '<img src="' + imgUrlPng + '" alt="Coldboot ' + num.toUpperCase() + '">' +
+                '<a href="' + pkgUrl + '">Download Coldboot ' + num.toUpperCase() + '</a>' +
                 '</div>';
         }
         document.getElementById("coldboot-list").innerHTML = coldbootHTML;
