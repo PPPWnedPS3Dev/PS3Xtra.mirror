@@ -24,7 +24,7 @@
 
         var coldbootHTML = "";
         for (var i = 1; i <= 13; i++) { // Limit to 13 existing files
-            var num = "o0" + i; // Ensure lowercase 'o0X' format
+            var num = "o" + (i < 10 ? "0" + i : i); // Ensure correct 'o0X' for 1-9 and 'oXX' for 10-13
             var pkgUrl = githubPkgBaseUrl + "Logo_HEN_O" + (i < 10 ? "0" + i : i) + ".pkg";
             var imgUrlPng = githubImgBaseUrl + "logo_hen_" + num + ".png";
             
