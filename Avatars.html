@@ -21,14 +21,15 @@
         function fetchAvatars() {
             var container = document.getElementById('avatarsContainer');
             
-            for (var i = 1; i <= 100; i++) { // Adjust the range based on available avatars
-                var iconUrl = iconsRepo + 'avatar' + i + '.png';
-                var pkgUrl = avatarsRepo + 'avatar' + i + '.pkg';
+            for (var i = 1; i <= 1010; i++) { // Adjusted upper range
+                var id = (8000000000 + i).toString(); // Generates correct ID format
+                var iconUrl = iconsRepo + 'TA9000-NPTA00001_00-AVATAR' + id + '-AE.png';
+                var pkgUrl = avatarsRepo + 'TA9000-NPTA00001_00-AVATAR' + id + '-AE.pkg';
                 
                 var div = document.createElement('div');
                 div.className = 'avatar';
-                div.innerHTML = '<img src="' + iconUrl + '" alt="Avatar ' + i + '"><br>' +
-                                '<a href="' + pkgUrl + '">Download Avatar ' + i + '</a>';
+                div.innerHTML = '<img src="' + iconUrl + '" alt="Avatar ' + i + '" onerror="this.style.display='none'"><br>' +
+                                '<a href="' + pkgUrl + '" download>Download Avatar ' + i + '</a>';
                 container.appendChild(div);
             }
         }
