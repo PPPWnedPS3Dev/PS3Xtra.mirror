@@ -1,39 +1,251 @@
-<script>
-    function checkCompatibility() {
-        var firmware = document.getElementById('firmware').value;
-        var serial = document.getElementById('serial').value.toUpperCase();
-        var result = document.getElementById('result');
-
-        // Check firmware compatibility
-        if (firmware !== "4.92") {
-            result.innerHTML = "❌ Only firmware 4.92 is supported for this compatibility check.";
-            result.className = "result not-compatible";
-            return;
-        }
-
-        // List of models fully compatible with CFW
-        var cfwModels = [
-            'CECHAxx', 'CECHBxx', 'CECHCxx', 'CECHDxx', 'CECHExx', 'CECHFxx', 'CECHGxx',
-            'CECHHxx', 'CECHIxx', 'CECHJxx', 'CECHKxx', 'CECHLxx', 'CECHMxx', 'CECHNxx',
-            'CECHOxx', 'CECHPxx', 'CECHQxx', 'CECH-20xxA', 'CECH-20xxB', 'CECH-21xxA',
-            'CECH-21xxB', 'CECH-25xxA', 'CECH-25xxB', 'CECH-2504A', 'CECH-2504B'
-        ];
-
-        // List of models compatible with PS3HEN only
-        var henModels = [
-            'CECH-30xxA', 'CECH-30xxB', 'CECH-40xxA', 'CECH-40xxB', 'CECH-40xxC',
-            'CECH-42xxA', 'CECH-42xxB', 'CECH-42xxC', 'CECH-43xxA', 'CECH-43xxB', 'CECH-43xxC'
-        ];
-
-        if (cfwModels.indexOf(serial) !== -1) {
-            result.innerHTML = "✔️ Your console is compatible with CFW for firmware 4.92!";
-            result.className = "result compatible";
-        } else if (henModels.indexOf(serial) !== -1) {
-            result.innerHTML = "❌ Your console is not compatible with the PS3 CFW. But don't worry, you can use PS3HEN on firmware 4.92!";
-            result.className = "result not-compatible";
-        } else {
-            result.innerHTML = "❌ Your console is not compatible with the PS3 CFW. But don't worry, you can use PS3HEN on firmware 4.92!";
-            result.className = "result not-compatible";
-        }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PS3 Firmware Checker</title>
+  <meta http-equiv="refresh" content="60">
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    #status { background: #e0e0e0; padding: 10px; border-bottom: 1px solid #ccc; position: relative; }
+    #log { margin-top: 20px; background: #f8f8f8; padding: 10px; max-height: 300px; overflow-y: scroll; white-space: pre-wrap; }
+    #logOptions { margin-top: 20px; padding: 10px; background: #e8e8e8; }
+    label { margin-right: 10px; }
+    /* Spinner styles */
+    #loadingIndicator {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      display: none;
     }
-</script>
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="status">
+    <h2>Firmware Status</h2>
+    <p><strong>Firmware Version:</strong> <span id="firmwareVersion">fetching data...</span></p>
+    <p><strong>PUP Date:</strong> <span id="pupDate">fetching data...</span></p>
+    <p><strong>Last Checked:</strong> <span id="lastChecked">fetching data...</span></p>
+    <p><strong>Download Link:</strong> <a id="downloadLink" href="#" target="_blank">fetching data...</a></p>
+    <div id="loadingIndicator"></div>
+  </div>
+
+  <!-- Log options section -->
+  <div id="logOptions">
+    <label>
+      Threshold (bytes):
+      <input type="number" id="autoClearThreshold" value="1048576" style="width: 100px;">
+    </label>
+    <button id="clearLogButton">Clear Log Now</button>
+  </div>
+
+  <div id="log">
+    <h3>Log Output</h3>
+    <div id="logContent"></div>
+  </div>
+
+  <script>
+    // Global variables
+    let baseVersion = "4.91";
+    const PS3_FIRMWARE_URL = "https://www.playstation.com/en-us/support/hardware/ps3/system-software/";
+    const proxyUrl = "https://api.allorigins.win/get?disableCache=true&url=";
+
+    // Auto-clear settings
+    let autoClearThreshold = 1048576; // 1MB
+
+    document.getElementById("autoClearThreshold").addEventListener("change", function() {
+      autoClearThreshold = parseInt(this.value) || 1048576;
+    });
+    document.getElementById("clearLogButton").addEventListener("click", clearLogs);
+
+    // Logging – use localStorage to persist logs
+    let logs = JSON.parse(localStorage.getItem("firmwareLogs") || "[]");
+    function updateLogDisplay() {
+      document.getElementById("logContent").textContent = logs.join("\n");
+    }
+    updateLogDisplay();
+
+    function clearLogs() {
+      logs = [];
+      localStorage.setItem("firmwareLogs", JSON.stringify(logs));
+      updateLogDisplay();
+      logMessage("Log cleared manually.");
+    }
+
+    // Check log size and clear
+    function checkLogSize() {
+      const logStr = localStorage.getItem("firmwareLogs") || "";
+      const size = new Blob([logStr]).size;
+      if (size > autoClearThreshold) {
+        clearLogs();
+        logMessage("Log automatically cleared due to exceeding threshold.");
+      }
+    }
+
+    function logMessage(msg, type = "info") {
+      const timestamp = new Date().toLocaleString();
+      const entry = `${timestamp} - ${msg}`;
+      logs.push(entry);
+      localStorage.setItem("firmwareLogs", JSON.stringify(logs));
+      updateLogDisplay();
+      checkLogSize();
+    }
+
+    // Update the status area on the page
+    function updateStatus(version, pupLink) {
+      document.getElementById("firmwareVersion").textContent = version || "fetching data...";
+      let pupDate = "fetching data...";
+      if (pupLink) {
+        const dateMatch = pupLink.match(/update\/ps3\/image\/us\/(\d{4}_\d{4})/);
+        if (dateMatch) {
+          const parts = dateMatch[1].split("_");
+          if(parts.length === 2 && parts[1].length === 4){
+            pupDate = `${parts[0]}-${parts[1].slice(0,2)}-${parts[1].slice(2)}`;
+          }
+        }
+      }
+      document.getElementById("pupDate").textContent = pupDate;
+      const now = new Date().toLocaleString();
+      document.getElementById("lastChecked").textContent = now;
+      const linkEl = document.getElementById("downloadLink");
+      if (pupLink) {
+        linkEl.href = pupLink;
+        linkEl.textContent = pupLink;
+      } else {
+        linkEl.href = "#";
+        linkEl.textContent = "fetching data...";
+      }
+    }
+
+    // Show or hide the loading spinner
+    function setLoading(isLoading) {
+      const loader = document.getElementById("loadingIndicator");
+      loader.style.display = isLoading ? "block" : "none";
+    }
+
+    // Check URL version consistency similar to Python.
+    function checkUrlVersion(pupLink, firmwareVersion) {
+      logMessage("Checking URL version consistency...");
+      const match = pupLink && pupLink.match(/update\/ps3\/image\/us\/(\d{4})/);
+      if (match) {
+        const yearInUrl = match[1];
+        logMessage(`Year found in URL: ${yearInUrl}`);
+        if (firmwareVersion === "4.91" && yearInUrl === "2024") {
+          logMessage("No download needed: Firmware version is 4.91 and year in URL is 2024.");
+          return true;
+        }
+        if (parseInt(yearInUrl) > 2024) {
+          logMessage("Year in URL is greater than 2024. Proceeding with update.");
+          return false;
+        }
+        if (parseFloat(firmwareVersion) > parseFloat("4.91") && parseInt(yearInUrl) >= 2024) {
+          logMessage("Firmware version is higher than 4.91. Proceeding with update.");
+          return false;
+        }
+      } else {
+        logMessage("Year not found in the URL.", "error");
+      }
+      return true;
+    }
+
+    // Fetch and parse the firmware page using AllOrigins proxy.
+    async function fetchFirmwareInfo() {
+      setLoading(true);
+      logMessage("Fetching firmware information...");
+      try {
+        const response = await fetch(proxyUrl + encodeURIComponent(PS3_FIRMWARE_URL));
+        if (!response.ok) throw new Error("Network response was not ok.");
+        const data = await response.json();
+        const htmlText = data.contents;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+
+        let versionElement = Array.from(doc.getElementsByTagName("h3"))
+                                  .find(el => el.textContent.includes("PS3 system software update"));
+        if (!versionElement) {
+          logMessage("Failed to locate firmware version element.", "error");
+          return { version: null, pupLink: null };
+        }
+        const versionText = versionElement.textContent.trim();
+        logMessage(`Firmware version text found: ${versionText}`);
+        const versionMatch = versionText.match(/update\s+(\d+\.\d+)/i);
+        if (!versionMatch) {
+          logMessage("Failed to extract firmware version.", "error");
+          return { version: null, pupLink: null };
+        }
+        const version = versionMatch[1];
+        logMessage(`Extracted firmware version: ${version}`);
+
+        let downloadLinkElement = doc.querySelector("a[href*='PS3UPDAT.PUP']");
+        if (!downloadLinkElement) {
+          logMessage("Failed to locate the download link.", "error");
+          return { version: version, pupLink: null };
+        }
+        const pupLink = downloadLinkElement.href;
+        logMessage(`Download link found: ${pupLink}`);
+
+        return { version: version, pupLink: pupLink };
+      } catch (error) {
+        logMessage("Error fetching firmware information: " + error.message, "error");
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // Wait for internet connectivity silently (without updating on-screen status).
+    async function waitForInternet(delay = 30000) {
+      logMessage("Waiting for internet connectivity...");
+      return new Promise(resolve => {
+        const interval = setInterval(async () => {
+          if (navigator.onLine) {
+            try {
+              await fetch("https://www.google.com", { method: "HEAD", mode: "no-cors" });
+              clearInterval(interval);
+              logMessage("Internet connection re-established.");
+              resolve();
+            } catch (e) {
+              logMessage("Still waiting for internet connection...", "error");
+            }
+          }
+        }, delay);
+        window.addEventListener("online", () => {
+          clearInterval(interval);
+          logMessage("Internet connection re-established (online event).");
+          resolve();
+        });
+      });
+    }
+
+    // Main function to run the check periodically
+    async function runCheck() {
+      try {
+        const { version, pupLink } = await fetchFirmwareInfo();
+        updateStatus(version, pupLink);
+        if (version === null || pupLink === null) {
+          throw new Error("Incomplete firmware information");
+        }
+        if (parseFloat(version) > parseFloat(baseVersion) || !checkUrlVersion(pupLink, version)) {
+          logMessage(`New firmware version detected or URL mismatch: ${version}`);
+          baseVersion = version;
+        } else {
+          logMessage(`No new firmware version found. Current version: ${version}`);
+        }
+      } catch (error) {
+        logMessage("Failed to retrieve firmware information. Checking internet connectivity...", "error");
+        await waitForInternet();
+      }
+      setTimeout(runCheck, 300000);
+    }
+
+    // Start the periodic check
+    runCheck();
+  </script>
+</body>
+</html>
