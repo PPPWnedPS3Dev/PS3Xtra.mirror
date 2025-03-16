@@ -1,62 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>PS3 Compatibility Checker</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #111; color: white; }
-        .checker-container { display: block; width: 100%; padding: 20px; }
-        .result { font-size: 1.5em; margin-top: 20px; }
-        .compatible { color: green; }
-        .not-compatible { color: red; }
-    </style>
-</head>
-<body>
-    <h1>PS3 Compatibility Checker</h1>
-    <div class="checker-container">
-        <p>Enter your PS3's firmware version and serial number below to check compatibility:</p>
-        <label for="firmware">Firmware Version:</label>
-        <input type="text" id="firmware" name="firmware" placeholder="e.g., 4.86">
-        <br><br>
-        <label for="serial">Serial Number:</label>
-        <input type="text" id="serial" name="serial" placeholder="e.g., CECH-2001A">
-        <br><br>
-        <button onclick="checkCompatibility()">Check Compatibility</button>
-        <div id="result" class="result"></div>
-    </div>
+<script>
+    function checkCompatibility() {
+        var firmware = document.getElementById('firmware').value;
+        var serial = document.getElementById('serial').value.toUpperCase();
+        var result = document.getElementById('result');
 
-    <script>
-        function checkCompatibility() {
-            var firmware = document.getElementById('firmware').value;
-            var serial = document.getElementById('serial').value.toUpperCase();
-            var result = document.getElementById('result');
-
-            // List of models fully compatible with CFW
-            var cfwModels = [
-                'CECHAxx', 'CECHBxx', 'CECHCxx', 'CECHDxx', 'CECHExx', 'CECHFxx', 'CECHGxx',
-                'CECHHxx', 'CECHIxx', 'CECHJxx', 'CECHKxx', 'CECHLxx', 'CECHMxx', 'CECHNxx',
-                'CECHOxx', 'CECHPxx', 'CECHQxx', 'CECH-20xxA', 'CECH-20xxB', 'CECH-21xxA',
-                'CECH-21xxB', 'CECH-25xxA', 'CECH-25xxB'
-            ];
-
-            // List of models compatible with PS3HEN only
-            var henModels = [
-                'CECH-30xxA', 'CECH-30xxB', 'CECH-40xxA', 'CECH-40xxB', 'CECH-40xxC',
-                'CECH-42xxA', 'CECH-42xxB', 'CECH-42xxC', 'CECH-43xxA', 'CECH-43xxB', 'CECH-43xxC'
-            ];
-
-            if (cfwModels.indexOf(serial) !== -1) {
-                result.innerHTML = '✔️ Your console is compatible with CFW!';
-                result.className = 'result compatible';
-            } else if (henModels.indexOf(serial) !== -1) {
-                result.innerHTML = '❌ Your console is not compatible with the PS3 CFW. But don\'t worry, you can use PS3HEN!';
-                result.className = 'result not-compatible';
-            } else {
-                result.innerHTML = '❌ Your console is not compatible with the PS3 CFW. But don\'t worry, you can use PS3HEN!';
-                result.className = 'result not-compatible';
-            }
+        // Check firmware compatibility
+        if (firmware !== "4.92") {
+            result.innerHTML = "❌ Only firmware 4.92 is supported for this compatibility check.";
+            result.className = "result not-compatible";
+            return;
         }
-    </script>
-</body>
-</html>
+
+        // List of models fully compatible with CFW
+        var cfwModels = [
+            'CECHAxx', 'CECHBxx', 'CECHCxx', 'CECHDxx', 'CECHExx', 'CECHFxx', 'CECHGxx',
+            'CECHHxx', 'CECHIxx', 'CECHJxx', 'CECHKxx', 'CECHLxx', 'CECHMxx', 'CECHNxx',
+            'CECHOxx', 'CECHPxx', 'CECHQxx', 'CECH-20xxA', 'CECH-20xxB', 'CECH-21xxA',
+            'CECH-21xxB', 'CECH-25xxA', 'CECH-25xxB', 'CECH-2504A', 'CECH-2504B'
+        ];
+
+        // List of models compatible with PS3HEN only
+        var henModels = [
+            'CECH-30xxA', 'CECH-30xxB', 'CECH-40xxA', 'CECH-40xxB', 'CECH-40xxC',
+            'CECH-42xxA', 'CECH-42xxB', 'CECH-42xxC', 'CECH-43xxA', 'CECH-43xxB', 'CECH-43xxC'
+        ];
+
+        if (cfwModels.indexOf(serial) !== -1) {
+            result.innerHTML = "✔️ Your console is compatible with CFW for firmware 4.92!";
+            result.className = "result compatible";
+        } else if (henModels.indexOf(serial) !== -1) {
+            result.innerHTML = "❌ Your console is not compatible with the PS3 CFW. But don't worry, you can use PS3HEN on firmware 4.92!";
+            result.className = "result not-compatible";
+        } else {
+            result.innerHTML = "❌ Your console is not compatible with the PS3 CFW. But don't worry, you can use PS3HEN on firmware 4.92!";
+            result.className = "result not-compatible";
+        }
+    }
+</script>
