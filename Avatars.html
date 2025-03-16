@@ -19,23 +19,18 @@
         var avatarsRepo = 'https://raw.githubusercontent.com/PPPWnedPS3Dev/PS3Avatars.mirror/main/';
         
         function fetchAvatars() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', avatarsRepo + 'index.json', true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var avatars = JSON.parse(xhr.responseText);
-                    var container = document.getElementById('avatarsContainer');
-                    
-                    for (var i = 0; i < avatars.length; i++) {
-                        var div = document.createElement('div');
-                        div.className = 'avatar';
-                        div.innerHTML = '<img src="' + iconsRepo + avatars[i].icon + '" alt="' + avatars[i].name + '"><br>' +
-                                        '<a href="' + avatarsRepo + avatars[i].pkg + '">' + avatars[i].name + '</a>';
-                        container.appendChild(div);
-                    }
-                }
-            };
-            xhr.send();
+            var container = document.getElementById('avatarsContainer');
+            
+            for (var i = 1; i <= 100; i++) { // Adjust the range based on available avatars
+                var iconUrl = iconsRepo + 'avatar' + i + '.png';
+                var pkgUrl = avatarsRepo + 'avatar' + i + '.pkg';
+                
+                var div = document.createElement('div');
+                div.className = 'avatar';
+                div.innerHTML = '<img src="' + iconUrl + '" alt="Avatar ' + i + '"><br>' +
+                                '<a href="' + pkgUrl + '">Download Avatar ' + i + '</a>';
+                container.appendChild(div);
+            }
         }
         
         fetchAvatars();
