@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PS3 Avatars</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { display: block; }
+        .avatar { margin: 10px; display: block; }
+        img { width: 100px; height: 100px; }
+    </style>
+</head>
+<body>
+    <h1>PS3 Avatars</h1>
+    <div class="container" id="avatarsContainer"></div>
+
+    <script>
+        var iconsRepo = 'https://raw.githubusercontent.com/PPPWnedPS3Dev/PS3AvatarsIcons.mirror/main/';
+        var avatarsRepo = 'https://raw.githubusercontent.com/PPPWnedPS3Dev/PS3Avatars.mirror/main/';
+        
+        function fetchAvatars() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', avatarsRepo + 'index.json', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var avatars = JSON.parse(xhr.responseText);
+                    var container = document.getElementById('avatarsContainer');
+                    
+                    for (var i = 0; i < avatars.length; i++) {
+                        var div = document.createElement('div');
+                        div.className = 'avatar';
+                        div.innerHTML = '<img src="' + iconsRepo + avatars[i].icon + '" alt="' + avatars[i].name + '"><br>' +
+                                        '<a href="' + avatarsRepo + avatars[i].pkg + '">' + avatars[i].name + '</a>';
+                        container.appendChild(div);
+                    }
+                }
+            };
+            xhr.send();
+        }
+        
+        fetchAvatars();
+    </script>
+</body>
+</html>
